@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+
+  appsmith:
+    image: index.docker.io/appsmith/appsmith-ee
+    container_name: appsmith
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - appsmith-stacks:/appsmith-stacks
+    restart: unless-stopped
+
+  postgres:
+    build:
+      context: postgres
+      dockerfile: Dockerfile
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: changeme
+    volumes:
+      - postgres:/var/lib/postgresql/data 
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+volumes:
+  appsmith-stacks:
+  postgres:
